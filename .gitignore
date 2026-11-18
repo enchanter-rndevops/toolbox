@@ -1,0 +1,23 @@
+# Pythonのキャッシュ
+__pycache__/
+*.py[cod]
+
+# ビルド・パッケージング成果物
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# 仮想環境
+.venv/
+venv/
+ENV/
+
+# IDE（VS Codeなど）
+.vscode/
+
+# OS固有ファイル
+.DS_Store
+Thumbs.db
+
+.local/

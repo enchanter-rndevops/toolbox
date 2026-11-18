@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=61.0.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "awstools"
+version = "0.1.0"
+dependencies = [
+    "botocore[crt]",
+    "boto3",
+]
+requires-python = ">=3.12"
+
+[project.scripts]
+# "コマンド名 = モジュール名.ファイル名:関数名"
+sgzu = "sgzu.main:main"
