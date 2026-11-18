@@ -65,7 +65,7 @@ $ sudo apt update && sudo apt install pipx -y
 
 ### 新しいパッケージを追加
 
-新しいパッケージを作成します。
+新しいパッケージを作成したら、コマンドのように使用できるようにするため、パッケージをインストールします。
 作成したパッケージを、[project.scripts] に追加する。
 
 ```toml
@@ -91,7 +91,7 @@ sgzu = "sgzu.main:main"
 すでにスクリプトが存在するとエラーになるので、--force で強制的に追加します。
 
 ```bash
-$ pipx reinstall --editable --force . 
+$ pipx install --editable --force . 
 ```
 
 これ以降は、コマンド名のみでパッケージを実行することができます。
