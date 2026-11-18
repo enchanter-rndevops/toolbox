@@ -1,4 +1,4 @@
-# AWSTOOLS
+# TOOLBOX
 
 開発に使用するpython便利スクリプトをまとめているプロジェクト。
 
