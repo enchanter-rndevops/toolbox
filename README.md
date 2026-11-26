@@ -1,11 +1,13 @@
 # TOOLBOX
 
-開発に使用するpython便利スクリプトをまとめているプロジェクト。
+開発に使用すると便利だと思われるPythonスクリプトをまとめているプロジェクト。
 
 スクリプトのリスト
 
 * **[sgzu](./sgzu/README.md)**
   セキュリティグループの図(mermaidダイアグラム)を自動生成する。
+* **[storeparam](./storeparam/README.md)**
+  ローカルにあるプロパティファイルをAWSパラメータストアに投入するスクリプト。
 
 ## ツールを使う
 
@@ -13,8 +15,8 @@ pyenvとpipxを使用し、コマンドのように使えるようにします�
 
 ### Pythonのインストール
 
-aptではなく、pyenvを使用します。
-システムのPythonでよければ、pyenvでpythonをインストールする必要はありません。
+Pythonの管理には pyenv を推奨しています。 
+システムの Python を利用する場合は、この手順はおこなわなくてよい。
 
 ```bash
 # Pythonのビルドに必要なパッケージのインストール
@@ -54,7 +56,7 @@ $ pyenv global 3.15.2
 
 ## pipxを使う
 
-pipxを使うことで、venvの設定を自動的に行い、コマンド名でスクリプトを実行することができます。
+pipx を利用すると、各ツールを独立した仮想環境にインストールし、コマンドとして実行できます。
 ここでは行いませんが、使用するpythonのバージョンを変更することもできます。
 
 ### pipxのインストール
@@ -63,11 +65,30 @@ pipxを使うことで、venvの設定を自動的に行い、コマンド名で
 $ sudo apt update && sudo apt install pipx -y
 ```
 
-### 新しいパッケージを追加
+## toolboxのインストール
 
-新しいパッケージを作成したら、コマンドのように使用できるようにするため、パッケージをインストールします。
-作成したパッケージを、[project.scripts] に追加する。
+pyproject.tomlにあるパッケージをコマンドのように使用することができます。
 
+```
+$ git clone https://github.com/enchanter-rndevops/toolbox.git
+$ cd toolbox
+$ pipx install --editable .
+```
+
+新しいコマンドが追加されたら、最新のソースを取得し、パッケージをインストールしてください。
+
+```bash
+$ pipx install --editable --force . 
+```
+
+
+
+### 新しいパッケージを作成し、追加
+
+ご自身で新しいパッケージを作成したら、コマンドのように使用できるようにするため、パッケージをインストールします。
+作成したパッケージを、[project.scripts] に追加し、インストールします。
+
+pyproject.toml
 ```toml
 [build-system]
 requires = ["setuptools>=61.0.0"]
@@ -81,6 +102,9 @@ dependencies = [
     "boto3",
 ]
 requires-python = ">=3.12"
+
+# ここに追加するコマンド名を追加する。
+include = ["sgzu"]
 
 [project.scripts]
 # "コマンド名 = モジュール名.ファイル名:関数名"

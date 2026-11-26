@@ -11,6 +11,11 @@ dependencies = [
 ]
 requires-python = ">=3.12"
 
-[project.scripts]
+[tool.setuptools.packages.find]
+# ここに追加するコマンド名を追加する。
+include = ["sgzu", "storeparam"]
+
 # "コマンド名 = モジュール名.ファイル名:関数名"
+[project.scripts]
 sgzu = "sgzu.main:main"
+storeparam = "storeparam.main:main"
