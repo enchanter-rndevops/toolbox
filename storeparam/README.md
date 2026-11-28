@@ -1,15 +1,15 @@
-# Spring Boot の spring.profiles.active と環境管理を見直してみた
+# Spring Boot の spring.profiles.active とパラメータストアで環境管理を見直してみた
 
 パラメータストアの値をAWS上で直接管理すると、
 
 * パラメータストアの値を大元とした管理がやりづらい。
-* パラメータへのコメントがない。
-* 修正履歴がない。
+* パラメータへのコメントがない(descriptionはある)。
+* 修正履歴がない(バージョン番号の管理はある)。
 * 環境の切り替えがやりづらい
 
 という問題があるように思います。
 
-実際には、パラメータストアではなく環境ごとのプロパティファイルだけで運用することもできます。しかし、Spring Boot では Spring Profile ごとに読み込む設定ファイルが変わるため、環境の追加や運用方法によっては設定の管理が複雑になります。
+実際には、パラメータストアではなく環境ごとのプロパティファイルだけで運用することもできますが、Spring Boot では Spring Profile ごとに読み込む設定ファイルが変わるため、環境の追加や運用方法によっては設定の管理が複雑になります。
 
 それらの問題を解決するため、パラメータストアの値をgit上で管理し、スクリプトでパラメータストアに投入する方式としてみました。
 
@@ -27,7 +27,15 @@ dev、stg、prod といったデプロイ環境の切り替えには使用しま
 
 環境の切り替えには ENV 環境変数を利用し、Parameter Store の参照先のみを変更します。
 
-## パラメータの値を管理
+このコードはAIが生成したものを利用目的に合わせて修正したものです。
+
+## パラメータの値をstoreparamで管理
+
+### インストール
+
+[TOOLBOX](https://github.com/enchanter-rndevops/toolbox) から git clone でソースを取得。
+pipxで TOOLBOX をインストールすると、storeparam がインストールされます。
+
 
 ### 環境別のプロパティファイルを作成
 
@@ -36,7 +44,7 @@ parameterstore-\<env\>.properties ファイルを作成します。
 
 ### パラメータストアに値を投入
 
-pipx でインストールしておきます。
+ファイル名は parameterstore-\<env\>.properties 固定で、カレントディレクトリにあるものを読み込みます。
 
 ```bash
 $ storeparam -prefix=<project-name>/<application-name> -env=<env>
@@ -62,8 +70,8 @@ spring.config.import=aws-parameterstore:<project-name>/<application-name>/${ENV}
 
 spring.config.import で storeparam で設定したパラメータストアの値が読み込まれます（同時にシークレットマネージャーの値も読み込まれます）。
 
-
-ローカル(application-local.properties)では直接プロパティファイルで設定し、シークレットマネージャーの値だけspring.config.importを使用して読み込むのがいいと思います。
+ローカル(application-local.properties)ではAWS エミュレータを使うことができます。
+再起動で消えてしまうので、これを使用せずに、直接プロパティファイルapplication-local.propertiesで設定してもいいと思います。
 
 パラメータストアにのみ設定がある状態にしておくと、設定があるところをまとめることができるので、application.propertiesは空にしておくといいと思います。
 

@@ -16,7 +16,7 @@ pyenvとpipxを使用し、コマンドのように使えるようにします�
 ### Pythonのインストール
 
 Pythonの管理には pyenv を推奨しています。 
-システムの Python を利用する場合は、この手順はおこなわなくてよい。
+システムの Python を利用する場合は、この手順を行う必要はありません。
 
 ```bash
 # Pythonのビルドに必要なパッケージのインストール
@@ -65,7 +65,7 @@ pipx を利用すると、各ツールを独立した仮想環境にインスト
 $ sudo apt update && sudo apt install pipx -y
 ```
 
-## toolboxのインストール
+### toolboxのインストール
 
 pyproject.tomlにあるパッケージをコマンドのように使用することができます。
 
@@ -82,10 +82,9 @@ $ pipx install --editable --force .
 ```
 
 
-
 ### 新しいパッケージを作成し、追加
 
-ご自身で新しいパッケージを作成したら、コマンドのように使用できるようにするため、パッケージをインストールします。
+新しいパッケージを作成したら、コマンドのように使用できるようにするため、パッケージをインストールします。
 作成したパッケージを、[project.scripts] に追加し、インストールします。
 
 pyproject.toml
@@ -119,3 +118,30 @@ $ pipx install --editable --force .
 ```
 
 これ以降は、コマンド名のみでパッケージを実行することができます。
+
+## コマンドの実行
+
+ここにあるツールは、環境変数AWS_ENDPOINT_URLを使用しています。
+エミュレータを使用する場合、環境変数AWS_ENDPOINT_URLなどを設定し、でエミュレータの環境設定を行ってください。
+
+このようなシェル関数を作成しておくと、
+```
+awse() {
+  env \
+  AWS_ENDPOINT_URL=https://127.0.0.1:9297 \
+  AWS_SHARED_CREDENTIALS_FILE="$HOME/.aws/emulator/9297/emulator_credentials" \
+  AWS_CONFIG_FILE="$HOME/.aws/emulator/9297/config" \
+  AWS_EC2_METADATA_DISABLED=true \
+  AWS_DISABLE_HOST_PREFIX_INJECTION=true \
+  AWS_REGION=ap-northeast-1 \
+  AWS_DEFAULT_REGION=ap-northeast-1 \
+  "$@"
+}
+```
+
+このように実行することでエミュレータ向けとなります。
+```
+$ awse <ツールのコマンド> <オプション>
+# aws cliをエミュレータ向けに実行する。
+$ awse aws s3 ls 
+```
